@@ -1,6 +1,27 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { Wifi, Coffee, Tv, Wind, Users, Maximize, Star } from "lucide-react";
+import { motion } from "motion/react";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
 
 export function Rooms() {
   const [filter, setFilter] = useState<string>("all");
@@ -15,9 +36,17 @@ export function Rooms() {
   });
 
   return (
-    <div className="pt-20">
+    <motion.div 
+      className="pt-20"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {/* Header */}
-      <section className="relative h-80 overflow-hidden">
+      <motion.section 
+        variants={itemVariants}
+        className="relative h-80 overflow-hidden"
+      >
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
@@ -32,10 +61,13 @@ export function Rooms() {
             Discover the perfect accommodation for your stay
           </p>
         </div>
-      </section>
+      </motion.section>
 
       {/* Filters */}
-      <section className="bg-white border-b sticky top-20 z-30">
+      <motion.section 
+        variants={itemVariants}
+        className="bg-white border-b sticky top-20 z-30"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
@@ -66,10 +98,13 @@ export function Rooms() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Rooms Grid */}
-      <section className="py-12 bg-gray-50">
+      <motion.section 
+        variants={itemVariants}
+        className="py-12 bg-gray-50"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <p className="text-gray-600">
@@ -77,13 +112,20 @@ export function Rooms() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div 
+            layout
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             {filteredRooms.map((room) => (
-              <Link
+              <motion.div
                 key={room.id}
-                to={`/rooms/${room.id}`}
-                className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all"
+                variants={itemVariants}
+                layout
               >
+                <Link
+                  to={`/rooms/${room.id}`}
+                  className="group block bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all h-full"
+                >
                 <div className="relative h-64 overflow-hidden">
                   <img
                     src={room.image}
@@ -147,9 +189,10 @@ export function Rooms() {
                     View Details
                   </button>
                 </div>
-              </Link>
+                </Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           {filteredRooms.length === 0 && (
             <div className="text-center py-16">
@@ -166,8 +209,8 @@ export function Rooms() {
             </div>
           )}
         </div>
-      </section>
-    </div>
+      </motion.section>
+    </motion.div>
   );
 }
 

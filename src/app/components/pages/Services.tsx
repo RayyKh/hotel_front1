@@ -1,10 +1,39 @@
 import { Utensils, Dumbbell, Wifi, Car, Waves, Coffee, Sparkles, Users, Phone, Clock } from "lucide-react";
+import { motion } from "motion/react";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
 
 export function Services() {
   return (
-    <div className="pt-20">
+    <motion.div 
+      className="pt-20"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {/* Header */}
-      <section className="relative h-80 overflow-hidden">
+      <motion.section 
+        variants={itemVariants}
+        className="relative h-80 overflow-hidden"
+      >
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1582719508461-905c673771fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
@@ -19,15 +48,19 @@ export function Services() {
             Enjoy world-class amenities and personalized service during your stay
           </p>
         </div>
-      </section>
+      </motion.section>
 
       {/* Services Grid */}
-      <section className="py-16">
+      <motion.section 
+        variants={itemVariants}
+        className="py-16"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
-              <div
+              <motion.div
                 key={index}
+                variants={itemVariants}
                 className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all"
               >
                 <div className="relative h-48 overflow-hidden">
@@ -51,14 +84,17 @@ export function Services() {
                     <span>{service.hours}</span>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Special Services */}
-      <section className="py-16 bg-gray-50">
+      <motion.section 
+        variants={itemVariants}
+        className="py-16 bg-gray-50"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl text-gray-900 mb-4">Special Services</h2>
@@ -69,7 +105,11 @@ export function Services() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {specialServices.map((service, index) => (
-              <div key={index} className="bg-white p-6 rounded-2xl shadow-sm">
+              <motion.div 
+                key={index} 
+                variants={itemVariants}
+                className="bg-white p-6 rounded-2xl shadow-sm"
+              >
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-[#2C5F4E]/10 rounded-xl flex items-center justify-center flex-shrink-0">
                     <service.icon className="text-[#2C5F4E]" size={24} />
@@ -82,14 +122,17 @@ export function Services() {
                     )}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* CTA */}
-      <section className="py-16 bg-gradient-to-br from-[#2C5F4E] to-[#234A3D]">
+      <motion.section 
+        variants={itemVariants}
+        className="py-16 bg-gradient-to-br from-[#2C5F4E] to-[#234A3D]"
+      >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl text-white mb-4">
             Need Something Special?
@@ -113,8 +156,8 @@ export function Services() {
             </a>
           </div>
         </div>
-      </section>
-    </div>
+      </motion.section>
+    </motion.div>
   );
 }
 

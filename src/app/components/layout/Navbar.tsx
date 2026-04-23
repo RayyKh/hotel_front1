@@ -72,7 +72,7 @@ export function Navbar() {
               </div>
             </div>
             <Link
-              to="/booking"
+              to="/rooms"
               className="px-6 py-2.5 bg-[#2C5F4E] text-white rounded-full hover:bg-[#234A3D] transition-all shadow-md hover:shadow-lg"
             >
               Book Now
@@ -123,7 +123,7 @@ export function Navbar() {
               ))}
             </div>
             <Link
-              to="/booking"
+              to="/rooms"
               onClick={() => setMobileMenuOpen(false)}
               className="block w-full px-6 py-3 bg-[#2C5F4E] text-white text-center rounded-full hover:bg-[#234A3D] transition-colors"
             >

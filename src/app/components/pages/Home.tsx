@@ -2,36 +2,73 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { Calendar, Users, MapPin, Star, Wifi, Coffee, Utensils, Waves, Award, Shield, Heart } from "lucide-react";
 import { SearchBar } from "../shared/SearchBar";
+import { motion } from "motion/react";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.21, 1.02, 0.47, 0.98],
+    },
+  },
+};
 
 export function Home() {
   return (
-    <div className="pt-20">
+    <motion.div 
+      className="pt-20"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
       {/* Hero Section */}
-      <section className="relative h-[600px] lg:h-[700px] overflow-hidden">
+      <motion.section 
+        variants={itemVariants}
+        className="relative h-[600px] lg:h-[700px] overflow-hidden"
+      >
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1920"
             alt="Luxury hotel room"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-black/30" />
+          <div className="absolute inset-0 bg-black/40" />
         </div>
 
-        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl text-white font-light mb-4 max-w-2xl">
+        <div className="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl text-white font-light mb-4 max-w-3xl">
             Welcome to <span className="font-semibold text-[#C9A961]">Acqua Viva</span>
           </h1>
-          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-xl">
+          <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl">
             Experience unparalleled luxury and comfort in the heart of paradise
           </p>
 
           {/* Search Bar */}
-          <SearchBar />
+          <div className="w-full max-w-4xl">
+            <SearchBar />
+          </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Highlights */}
-      <section className="py-16 bg-gray-50">
+      <motion.section 
+        variants={itemVariants}
+        className="py-16 bg-gray-50"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl text-gray-900 mb-4">Why Choose Acqua Viva</h2>
@@ -55,10 +92,13 @@ export function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Featured Rooms */}
-      <section className="py-16">
+      <motion.section 
+        variants={itemVariants}
+        className="py-16"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
@@ -119,10 +159,13 @@ export function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Testimonials */}
-      <section className="py-16 bg-gradient-to-br from-[#2C5F4E] to-[#234A3D]">
+      <motion.section 
+        variants={itemVariants}
+        className="py-16 bg-gradient-to-br from-[#2C5F4E] to-[#234A3D]"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl text-white mb-4">What Our Guests Say</h2>
@@ -158,10 +201,13 @@ export function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-white">
+      <motion.section 
+        variants={itemVariants}
+        className="py-20 bg-white"
+      >
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl text-gray-900 mb-4">
             Ready for an Unforgettable Experience?
@@ -170,14 +216,14 @@ export function Home() {
             Book your stay today and discover the luxury you deserve
           </p>
           <Link
-            to="/booking"
+            to="/rooms"
             className="inline-block px-8 py-4 bg-[#2C5F4E] text-white rounded-full hover:bg-[#234A3D] transition-all shadow-lg hover:shadow-xl hover:scale-105"
           >
             Book Your Stay Now
           </Link>
         </div>
-      </section>
-    </div>
+      </motion.section>
+    </motion.div>
   );
 }
 

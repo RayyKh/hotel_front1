@@ -1,12 +1,24 @@
 import { useState } from "react";
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-import { TrendingUp, Users, DollarSign, Calendar, CheckCircle, Clock, XCircle, Search } from "lucide-react";
+import { TrendingUp, Users, DollarSign, Calendar, CheckCircle, Clock, XCircle, Search, Trash2, MoreVertical, Edit } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 export function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [allReservations, setAllReservations] = useState(initialReservations);
 
-  const filteredReservations = reservations.filter((res) => {
+  const handleStatusChange = (id: string, newStatus: string) => {
+    setAllReservations(prev => prev.map(res => 
+      res.id === id ? { ...res, status: newStatus as any } : res
+    ));
+  };
+
+  const handleDelete = (id: string) => {
+    setAllReservations(prev => prev.filter(res => res.id !== id));
+  };
+
+  const filteredReservations = allReservations.filter((res) => {
     const matchesSearch = res.guestName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          res.roomType.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          res.id.toLowerCase().includes(searchTerm.toLowerCase());
@@ -185,49 +197,92 @@ export function AdminDashboard() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredReservations.map((reservation) => (
-                  <tr key={reservation.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      {reservation.id}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{reservation.guestName}</div>
-                      <div className="text-sm text-gray-500">{reservation.email}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {reservation.roomType}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{reservation.checkIn}</div>
-                      <div className="text-sm text-gray-500">{reservation.checkOut}</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {reservation.guests}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                      ${reservation.total}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
-                          reservation.status === "confirmed"
-                            ? "bg-green-100 text-green-800"
-                            : reservation.status === "pending"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
-                        }`}
-                      >
-                        {reservation.status === "confirmed" && <CheckCircle size={14} />}
-                        {reservation.status === "pending" && <Clock size={14} />}
-                        {reservation.status === "cancelled" && <XCircle size={14} />}
-                        {reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                <AnimatePresence mode="popLayout">
+                  {filteredReservations.map((reservation) => (
+                    <motion.tr
+                      key={reservation.id}
+                      layout
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, x: -20 }}
+                      transition={{ duration: 0.2 }}
+                      className="hover:bg-gray-50 transition-colors group"
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {reservation.id}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm font-medium text-gray-900">{reservation.guestName}</div>
+                        <div className="text-sm text-gray-500">{reservation.email}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {reservation.roomType}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="text-sm text-gray-900">{reservation.checkIn}</div>
+                        <div className="text-sm text-gray-500">{reservation.checkOut}</div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {reservation.guests}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        ${reservation.total}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <motion.span
+                          layout
+                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${
+                            reservation.status === "confirmed"
+                              ? "bg-green-100 text-green-800"
+                              : reservation.status === "pending"
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
+                          }`}
+                        >
+                          {reservation.status === "confirmed" && <CheckCircle size={14} />}
+                          {reservation.status === "pending" && <Clock size={14} />}
+                          {reservation.status === "cancelled" && <XCircle size={14} />}
+                          {reservation.status.charAt(0).toUpperCase() + reservation.status.slice(1)}
+                        </motion.span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                          {reservation.status === "pending" && (
+                            <button
+                              onClick={() => handleStatusChange(reservation.id, "confirmed")}
+                              className="p-1.5 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                              title="Confirm"
+                            >
+                              <CheckCircle size={18} />
+                            </button>
+                          )}
+                          {reservation.status !== "cancelled" && (
+                            <button
+                              onClick={() => handleStatusChange(reservation.id, "cancelled")}
+                              className="p-1.5 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                              title="Cancel"
+                            >
+                              <XCircle size={18} />
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleDelete(reservation.id)}
+                            className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </AnimatePresence>
               </tbody>
             </table>
           </div>
@@ -240,7 +295,7 @@ export function AdminDashboard() {
 
           <div className="px-6 py-4 border-t bg-gray-50">
             <p className="text-sm text-gray-600">
-              Showing {filteredReservations.length} of {reservations.length} reservations
+              Showing {filteredReservations.length} of {allReservations.length} reservations
             </p>
           </div>
         </div>
@@ -321,7 +376,7 @@ const quickStats = [
   { label: "Average Rate", value: "$289" },
 ];
 
-const reservations = [
+const initialReservations = [
   {
     id: "RES-1001",
     guestName: "John Smith",
